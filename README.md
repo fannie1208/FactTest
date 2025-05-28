@@ -4,5 +4,5 @@
 
 [**Paper**](https://arxiv.org/abs/2411.02603)
 
----
-Will be open-sourced in May, 2025.
+## News
+May.27, 2025: Update source code
