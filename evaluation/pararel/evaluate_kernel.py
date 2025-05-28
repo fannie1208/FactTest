@@ -13,8 +13,6 @@ import math
 import os
 import numpy as np
 import evaluate
-from eval import eval_acc, eval_ap
-
 
 
 # Set a seed value

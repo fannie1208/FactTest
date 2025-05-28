@@ -9,7 +9,6 @@ import random
 from argparse import ArgumentParser
 import os
 import numpy as np
-from eval import eval_acc, eval_ap
 
 STOP = []
 SURE = []

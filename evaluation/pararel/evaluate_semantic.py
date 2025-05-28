@@ -10,9 +10,6 @@ from scipy.stats import entropy
 import math
 import os
 import numpy as np
-import evaluate
-from eval import eval_acc, eval_ap
-
 
 # Set a seed value
 def set_seed(seed):
@@ -26,9 +23,6 @@ def set_seed(seed):
 end_chars = ['.', '\n']
 device='cuda'
 llh_shift = torch.tensor(5.0)
-
-# os.environ['NCCL_TIMEOUT'] = '3600'
-# os.environ['NCCL_DEBUG'] = 'INFO'
 
 def calculate_certainty(input_data):
     answers = []
@@ -96,7 +90,6 @@ def calculate_certainty(input_data):
             generation = generations[generation_index]
             target_ids = generation.clone()
             target_ids[:len(prompt)] = -100
-            #print(generation.shape)
             model_output = model(torch.reshape(generation, (1, -1)), labels=target_ids, output_hidden_states=True)
             average_neg_log_likelihood = model_output['loss'].cpu()
             average_neg_log_likelihoods[generation_index] = -average_neg_log_likelihood
@@ -193,13 +186,10 @@ if __name__ == "__main__":
             result = (sample[1] in output, predict_conf, certainty.item())
             print(result)
             results.append(result)
-        # results = [results]
 
     results_gathered=gather_object(results)
 
     if accelerator.is_main_process:
-
-        # Save results to files
         os.makedirs("results", exist_ok=True)
         with open(f"results/ours_{args.domain}_{args.num_try}_semantic_{model_name}.json", 'w') as f:
             json.dump(results_gathered, f)
