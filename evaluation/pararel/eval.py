@@ -81,7 +81,6 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('--domain',type=str, default="ID")
     parser.add_argument("--num_try",type=int,default=10)
-    parser.add_argument("--alpha",type=float,default=0.5)
     parser.add_argument("--tau",type=float,default=-0.8018185525433373)
     parser.add_argument("--model",type=str,default="openlm-research/open_llama_3b")
     parser.add_argument("--method",type=str,default="vanilla",choices=["vanilla","semantic","rtuning","classifier","kernel","gpt","clm","claude","scgpt","gpt_scgpt","claude_scgpt","saplma",'udeg'])
@@ -139,14 +138,6 @@ if __name__ == "__main__":
             else:
                 uncertain_results.append(d)
 
-    # beta = 1
-
-    # results = []
-    # for d in data:
-    #     predict_conf, sure_conf = d[-2], d[-1]
-    #     conf = beta*sure_conf + (1-beta)*predict_conf
-    #     updated_result = list(d) + [conf]
-    #     results.append(updated_result)
     
     print('All:')
     certain_num, total_num, total_acc = eval_acc(data)

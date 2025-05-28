@@ -13,7 +13,7 @@ import math
 import os
 from selfcheckgpt.modeling_selfcheck import SelfCheckNLI
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 #selfcheck_nli = SelfCheckNLI(device=torch.device("cuda"))
 
 def inference(input_text, model):
@@ -88,8 +88,8 @@ if __name__ == "__main__":
                 break
     
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.bfloat16,device_map='auto',cache_dir=cache_dir)
+        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.bfloat16,device_map='auto')
 
         certainties = []
         with open(f"../training_data/pararel_{model_name}_{args.dataset}.json",'r') as f:

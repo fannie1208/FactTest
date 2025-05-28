@@ -16,7 +16,7 @@ STOP = []
 SURE = []
 UNSURE = []
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 
 end_chars = ['.', '\n']
 choices = ["A", "B", "C"]
@@ -154,8 +154,8 @@ if __name__ == "__main__":
     accelerator = Accelerator()
     device = accelerator.device
     
-    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.bfloat16,cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.bfloat16)
 
     deberta_tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli")
     deberta_model = AutoModelForSequenceClassification.from_pretrained("microsoft/deberta-v2-xlarge-mnli").cuda()

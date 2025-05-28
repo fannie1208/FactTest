@@ -15,7 +15,7 @@ STOP = []
 SURE = []
 UNSURE = []
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 
 def set_seed(seed):
     random.seed(seed)
@@ -127,8 +127,8 @@ if __name__ == "__main__":
     
     # Load model and tokenizer
     print(f"Loading model {args.model}...")
-    tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True, unk_token="<unk>", bos_token="<s>", eos_token="</s>", add_bos_token=False, cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model, device_map='auto', cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True, unk_token="<unk>", bos_token="<s>", eos_token="</s>", add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model, device_map='auto')
     
     STOP.append(tokenizer(".").input_ids)  # stop decoding when seeing '.'
     SURE.append(tokenizer("sure").input_ids)

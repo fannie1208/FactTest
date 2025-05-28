@@ -12,8 +12,6 @@ import numpy as np
 import math
 import os
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
-
 def inference(input_text, model):
     device = torch.device("cuda:0")
     full_input = "Question:" + input_text + " Answer:"
@@ -61,7 +59,7 @@ if __name__ == "__main__":
     parser.add_argument("--alpha",type=float,default=0.8)
     parser.add_argument("--delta",type=float,default=0.01)
     parser.add_argument("--stored", action="store_true")
-    parser.add_argument('--scale', type=str, default='3b')
+
     
     args = parser.parse_args()
     
@@ -92,8 +90,8 @@ if __name__ == "__main__":
                 break
     
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.bfloat16,device_map='auto',cache_dir=cache_dir)
+        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.bfloat16,device_map='auto')
 
         certainties = []
         with open(f"../training_data/pararel_{model_name}_{args.dataset}.json",'r') as f:

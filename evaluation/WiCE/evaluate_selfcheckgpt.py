@@ -16,7 +16,7 @@ STOP = []
 SURE = []
 UNSURE = []
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 end_chars = ['.', '\n']
 choices = ["A", "B", "C"]
 candidate_answer = ['supported.','partially_supported.','not_supported.']
@@ -127,8 +127,8 @@ if __name__ == "__main__":
     model_name = args.model.split('/')[-1]
     accelerator = Accelerator()
     
-    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False, cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.float16, cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.float16)
     
     STOP.append(tokenizer(".").input_ids)  #stop decoding when seeing '.'
     SURE.append(tokenizer("sure").input_ids)

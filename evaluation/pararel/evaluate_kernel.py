@@ -15,7 +15,7 @@ import numpy as np
 import evaluate
 from eval import eval_acc, eval_ap
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 
 # Set a seed value
 def set_seed(seed):
@@ -180,11 +180,11 @@ if __name__ == "__main__":
     accelerator = Accelerator()
 
     device = accelerator.device
-    tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True, unk_token="<unk>", bos_token="<s>", eos_token="</s>", add_bos_token=False,cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model, device_map=device, torch_dtype=torch.float16,cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=True, unk_token="<unk>", bos_token="<s>", eos_token="</s>", add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model, device_map=device, torch_dtype=torch.float16)
 
-    deberta_tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli",cache_dir=cache_dir)
-    deberta_model = AutoModelForSequenceClassification.from_pretrained("microsoft/deberta-v2-xlarge-mnli",cache_dir=cache_dir).cuda()
+    deberta_tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli")
+    deberta_model = AutoModelForSequenceClassification.from_pretrained("microsoft/deberta-v2-xlarge-mnli").cuda()
     
     if tokenizer.pad_token is None:
         tokenizer.add_special_tokens({'pad_token': '[PAD]'})
