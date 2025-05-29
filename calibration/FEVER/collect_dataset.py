@@ -9,7 +9,7 @@ import math
 import os
 import numpy as np
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 
 choices = ["A", "B", "C"]
 candidate_answer = ['SUPPORTS.','REFUTES.','NOT ENOUGH INFO.']
@@ -67,8 +67,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     model_name = args.model.split('/')[-1]
-    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto')
 
     data = []
     with open(f"../../dataset/FEVER/{args.dataset}.json",'r') as f:

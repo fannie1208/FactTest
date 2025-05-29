@@ -37,19 +37,12 @@ if __name__ == "__main__":
     parser.add_argument("--alpha",type=float,default=0.5)
     parser.add_argument("--tau",type=float,default=-0.8018185525433373)
     parser.add_argument("--model",type=str,default="openlm-research/open_llama_3b")
-    parser.add_argument("--method",type=str,default="vanilla",choices=["vanilla","semantic","classifier","rtuning","kernel","scgpt","saplma"])
+    parser.add_argument("--method",type=str,default="vanilla",choices=["vanilla","semantic","kernel"])
     args = parser.parse_args()
 
     model_name = args.model.split('/')[-1]
-    if args.method == 'rtuning' or args.method == 'classifier':
-        with open(f"results/ours_{args.method}_{model_name}.json",'r') as f:
-            data = json.load(f)
-    elif args.method == 'saplma':
-        with open(f"results/ours_{args.method}_{model_name}.json",'r') as f:
-            data = json.load(f)
-    else:
-        with open(f"results/ours_{args.num_try}_{args.method}_{model_name}.json",'r') as f:
-            data = json.load(f)
+    with open(f"results/ours_{args.num_try}_{args.method}_{model_name}.json",'r') as f:
+        data = json.load(f)
     
     tau = args.tau
 
@@ -57,21 +50,12 @@ if __name__ == "__main__":
     certain_results = []
 
     for d in data:
-        if args.method == 'scgpt':
-            d[-1] = -d[-1]
         if d[-1] > tau:
             certain_results.append(d)
         else:
             uncertain_results.append(d)
 
-    # beta = 1
 
-    # results = []
-    # for d in data:
-    #     predict_conf, sure_conf = d[-2], d[-1]
-    #     conf = beta*sure_conf + (1-beta)*predict_conf
-    #     updated_result = list(d) + [conf]
-    #     results.append(updated_result)
     print('All:')
     certain_num, total_num, total_acc = eval_acc(data)
     uncertain_num = total_num-certain_num

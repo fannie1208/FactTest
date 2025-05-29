@@ -15,7 +15,6 @@ STOP = []
 SURE = []
 UNSURE = []
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
 end_chars = ['.', '\n']
 
 def set_seed(seed):
@@ -111,10 +110,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', type=str, default='openlm-research/open_llama_7b')
     parser.add_argument('--result',type=str, default="Hotpot")
     parser.add_argument("--num_try",type=int,default=5)
-    parser.add_argument("--alpha",type=float,default=0.5)
-    parser.add_argument('--beta',type=float,default=1)
     parser.add_argument("--tau",type=float,default=0.5)
-    parser.add_argument('--scale', type=str, default='7b')
     parser.add_argument('--seed', type=int, default=999, help='random seed')
 
     args = parser.parse_args()
@@ -123,8 +119,8 @@ if __name__ == "__main__":
     
     accelerator = Accelerator()
     
-    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.float16,cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.float16)
     
     STOP.append(tokenizer(".").input_ids)  #stop decoding when seeing '.'
     SURE.append(tokenizer("sure").input_ids)

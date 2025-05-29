@@ -14,7 +14,6 @@ import os
 
 end_chars = ['.', '\n']
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
 
 choices = ["A", "B", "C"]
 candidate_answer = ['supported.','partially_supported.','not_supported.']
@@ -106,8 +105,8 @@ if __name__ == "__main__":
                 break
 
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.bfloat16,device_map='auto',cache_dir=cache_dir)
+        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.bfloat16,device_map='auto')
         
         certainties = []
         with open(f"../training_data/WiCE_{model_name}_{args.dataset}.json",'r') as f:

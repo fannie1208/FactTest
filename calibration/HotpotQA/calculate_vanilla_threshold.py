@@ -13,7 +13,6 @@ import math
 import os
 
 end_chars = ['.', '\n']
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
 
 def format_question(input_data):
     
@@ -102,8 +101,8 @@ if __name__ == "__main__":
                 break
 
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.float16,device_map='auto',cache_dir=cache_dir)
+        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.float16,device_map='auto')
 
         certainties = []
         with open(f"../training_data/Hotpot_{model_name}_{args.dataset}.json",'r') as f:

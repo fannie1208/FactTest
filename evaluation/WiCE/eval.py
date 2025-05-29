@@ -32,63 +32,33 @@ def eval_ap(results, base=False):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument('--domain',type=str, default="ID")
     parser.add_argument("--num_try",type=int,default=10)
-    parser.add_argument("--alpha",type=float,default=0.5)
-    parser.add_argument("--tau",type=float,default=-0.8018185525433373)
+    parser.add_argument("--tau",type=float,default=-0.5)
     parser.add_argument("--model",type=str,default="openlm-research/open_llama_3b")
-    parser.add_argument("--method",type=str,default="vanilla",choices=["vanilla","semantic","rtuning","gpt","scgpt"])
+    parser.add_argument("--method",type=str,default="vanilla",choices=["vanilla","semantic"])
     args = parser.parse_args()
 
     model_name = args.model.split('/')[-1]
-    if args.method == "gpt":
-        with open(f"results/ours_gpt_4o_mini.json",'r') as f:
-            data = json.load(f)
-        with open(f"results/ours_10_semantic_open_llama_13b.json",'r') as f:
-            certainty = json.load(f)
-    elif args.method == "rtuning":
-        with open(f"results/ours_{args.method}_{model_name}.json",'r') as f:
-            data = json.load(f)
-    else:
-        with open(f"results/ours_{args.num_try}_{args.method}_{model_name}.json",'r') as f:
-            data = json.load(f)
+    with open(f"results/ours_{args.num_try}_{args.method}_{model_name}.json",'r') as f:
+        data = json.load(f)
     
     tau = args.tau
 
     uncertain_results = []
     certain_results = []
 
-    if args.method == 'gpt':
-        for i in range(len(data)):
-            if certainty[i][-1] > tau:
-                certain_results.append([data[i]])
-            else:
-                uncertain_results.append([data[i]])
-        data = certain_results + uncertain_results
-    else:
-        for d in data:
-            if args.method == 'scgpt':
-                d[-1] = -d[-1]
-            if d[-1] > tau:
-                certain_results.append(d)
-            else:
-                uncertain_results.append(d)
 
-    # beta = 1
+    for d in data:
+        if d[-1] > tau:
+            certain_results.append(d)
+        else:
+            uncertain_results.append(d)
 
-    # results = []
-    # for d in data:
-    #     predict_conf, sure_conf = d[-2], d[-1]
-    #     conf = beta*sure_conf + (1-beta)*predict_conf
-    #     updated_result = list(d) + [conf]
-    #     results.append(updated_result)
     
     print('All:')
     certain_num, total_num, total_acc = eval_acc(data)
     uncertain_num = total_num-certain_num
     print(certain_num, total_num, total_acc)
-    # print("pretrained AP (use sure prob)", eval_ap(data, base=True))
-    # print("entire AP", eval_ap(data))
 
     print('Certain:')
     print(len(certain_results))

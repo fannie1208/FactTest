@@ -80,65 +80,27 @@ def bootstrap_confidence_interval(data, num_bootstrap_samples=100000, confidence
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('--domain',type=str, default="ID")
-    parser.add_argument("--num_try",type=int,default=10)
-    parser.add_argument("--tau",type=float,default=-0.8018185525433373)
+    parser.add_argument("--num_try",type=int,default=5)
+    parser.add_argument("--tau",type=float,default=-0.5)
     parser.add_argument("--model",type=str,default="openlm-research/open_llama_3b")
-    parser.add_argument("--method",type=str,default="vanilla",choices=["vanilla","semantic","rtuning","classifier","kernel","gpt","clm","claude","scgpt","gpt_scgpt","claude_scgpt","saplma",'udeg'])
+    parser.add_argument("--method",type=str,default="vanilla",choices=["vanilla","semantic","kernel"])
     args = parser.parse_args()
     model_name = args.model.split('/')[-1]
 
-    if args.method == "clm":
-        with open(f"results/ours_ID_clm_{model_name}.json",'r') as f:
-            data = json.load(f)
-    elif args.method == "claude_scgpt":
-        with open(f"results/ours_ID_claude_scgpt.json",'r') as f:
-            data = json.load(f)
-    elif args.method == "gpt_scgpt":
-        with open(f"results/ours_ID_gpt_4o_modified_scgpt.json",'r') as f:
-            data = json.load(f)
-    elif args.method == "claude":
-        with open(f"results/ours_ID_claude.json",'r') as f:
-            data = json.load(f)
-        with open(f"results/ours_ID_15_kernel_open_llama_7b.json",'r') as f:
-            certainty = json.load(f)
-    elif args.method == "gpt":
-        with open(f"results/ours_ID_gpt_4o.json",'r') as f:
-            data = json.load(f)[:4890]
-        with open(f"results/ours_ID_gpt_4o_modified.json",'r') as f:
-            data = data+json.load(f)
-        with open(f"results/ours_ID_15_semantic_open_llama_7b.json",'r') as f:
-            certainty = json.load(f)
-    elif args.method == 'rtuning' or args.method == 'classifier':
-        with open(f"results/ours_{args.domain}_{args.method}_{model_name}.json",'r') as f:
-            data = json.load(f)
-    elif args.method == 'saplma':
-        with open(f"results/ours_{args.domain}_saplma_{model_name}.json",'r') as f:
-            data = json.load(f)
-    else:
-        with open(f"results/ours_{args.domain}_{args.num_try}_{args.method}_{model_name}.json",'r') as f:
-            data = json.load(f)
+    with open(f"results/ours_{args.domain}_{args.num_try}_{args.method}_{model_name}.json",'r') as f:
+        data = json.load(f)
     
     tau = args.tau
 
     uncertain_results = []
     certain_results = []
-    if args.method == 'gpt' or args.method == 'claude':
-        for i in range(len(data)):
-            if certainty[i][-1] > tau:
-                certain_results.append([data[i]])
-            else:
-                uncertain_results.append([data[i]])
-        data = certain_results + uncertain_results
-    else:
-        for d in data:
-            if args.method == 'scgpt' or args.method == 'gpt_scgpt' or args.method == 'claude_scgpt':
-                d[-1] = -d[-1]
-            if d[-1] > tau:
-                certain_results.append(d)
-            else:
-                uncertain_results.append(d)
 
-    
+    for d in data:
+        if d[-1] > tau:
+            certain_results.append(d)
+        else:
+            uncertain_results.append(d)
+
     print('All:')
     certain_num, total_num, total_acc = eval_acc(data)
     uncertain_num = total_num-certain_num

@@ -18,7 +18,7 @@ STOP = []
 SURE = []
 UNSURE = []
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 end_chars = ['.', '\n']
 llh_shift = torch.tensor(5.0)
 # device=torch.device("cuda")
@@ -192,10 +192,7 @@ if __name__ == "__main__":
     parser.add_argument('--assist_model', type=str, default='Qwen/Qwen2.5-3B')
     parser.add_argument('--result',type=str, default="Hotpot")
     parser.add_argument("--num_try",type=int,default=5)
-    parser.add_argument("--alpha",type=float,default=0.5)
-    parser.add_argument('--beta',type=float,default=1)
     parser.add_argument("--tau",type=float,default=0.5)
-    parser.add_argument('--scale', type=str, default='3b')
     parser.add_argument('--seed', type=int, default=999, help='random seed')
     parser.add_argument('--weight_entail', type=float, default=0.7, help='Weight for the entailment class')
     parser.add_argument('--weight_neutral', type=float, default=0.3, help='Weight for the neutral class')
@@ -210,13 +207,13 @@ if __name__ == "__main__":
     
     # tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
     # model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.float16,cache_dir=cache_dir)
-    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model,device_map=device,torch_dtype=torch.float16,cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model,device_map=device,torch_dtype=torch.float16)
     # assist_tokenizer = AutoTokenizer.from_pretrained(args.assist_model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
     # assist_model = AutoModelForCausalLM.from_pretrained(args.assist_model,device_map='auto',torch_dtype=torch.float16,cache_dir=cache_dir)
     
-    deberta_tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli",cache_dir=cache_dir)
-    deberta_model = AutoModelForSequenceClassification.from_pretrained("microsoft/deberta-v2-xlarge-mnli",cache_dir=cache_dir).cuda()
+    deberta_tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli")
+    deberta_model = AutoModelForSequenceClassification.from_pretrained("microsoft/deberta-v2-xlarge-mnli").cuda()
 
     STOP.append(tokenizer(".").input_ids)  #stop decoding when seeing '.'
     SURE.append(tokenizer("sure").input_ids)

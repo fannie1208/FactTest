@@ -9,7 +9,7 @@ import math
 import numpy as np
 import os
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 
 def set_seed(seed):
     random.seed(seed)
@@ -57,8 +57,8 @@ if __name__ == "__main__":
     model_name = args.model.split('/')[-1]
     set_seed(args.seed)
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.float16,device_map='auto',cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.float16,device_map='auto')
 
     data = []
     with open(f"../../dataset/HotpotQA/{args.dataset}.json",'r') as f:

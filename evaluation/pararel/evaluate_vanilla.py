@@ -137,7 +137,7 @@ if __name__ == "__main__":
     
     if accelerator.is_main_process:
         os.makedirs("results",exist_ok=True)
-        with open(f"results/ours_{args.domain}_{args.num_try}_vanilla_{model_name}_1.json",'w') as f:
+        with open(f"results/ours_{args.domain}_{args.num_try}_vanilla_{model_name}.json",'w') as f:
             json.dump(results,f)
 
                  

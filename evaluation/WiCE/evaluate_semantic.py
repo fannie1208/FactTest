@@ -147,7 +147,6 @@ if __name__ == "__main__":
     parser.add_argument("--alpha",type=float,default=0.5)
     parser.add_argument('--beta',type=float,default=1)
     parser.add_argument("--tau",type=float,default=0.5)
-    parser.add_argument('--scale', type=str, default='3b')
     
     args = parser.parse_args()
     model_name = args.model.split('/')[-1]

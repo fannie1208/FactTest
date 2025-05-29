@@ -16,7 +16,7 @@ STOP = []
 SURE = []
 UNSURE = []
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 end_chars = ['.', '\n']
 llh_shift = torch.tensor(5.0)
 device=torch.device("cuda")
@@ -151,34 +151,13 @@ def calculate_certainty(input_data):
     print(-entropy)
     return -entropy
 
-def checksure(input_text):
-    full_input = f"{input_text}. Are you sure you accurately answered the question based on your internal knowledge? I am"
-    inputs = tokenizer(full_input,return_tensors="pt").to(0)
-    ids = inputs['input_ids']
-    outputs = model.generate(
-                ids,
-                max_new_tokens = 1,
-                output_scores = True,
-                return_dict_in_generate=True
-            )
-    logits = outputs['scores']
-     #greedy decoding and calculate the confidence of sure and unsure
-    pt = torch.softmax(torch.Tensor(logits[0][0]),dim=0)
-    sure_prob = pt[SURE[0]]
-    unsure_prob = pt[UNSURE[0]]
-    sure_prob = sure_prob/(sure_prob+unsure_prob)   #normalization
-       
-    return sure_prob.item()
 
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('--model', type=str, default='openlm-research/open_llama_3b')
     parser.add_argument('--result',type=str, default="Hotpot")
     parser.add_argument("--num_try",type=int,default=5)
-    parser.add_argument("--alpha",type=float,default=0.5)
-    parser.add_argument('--beta',type=float,default=1)
     parser.add_argument("--tau",type=float,default=0.5)
-    parser.add_argument('--scale', type=str, default='3b')
     parser.add_argument('--seed', type=int, default=999, help='random seed')
 
     args = parser.parse_args()
@@ -187,8 +166,8 @@ if __name__ == "__main__":
     accelerator = Accelerator()
     # device = accelerator.device
     
-    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.float16,cache_dir=cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+    model = AutoModelForCausalLM.from_pretrained(args.model,device_map='auto',torch_dtype=torch.float16)
     model.bfloat16()
     deberta_tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli")
     deberta_model = AutoModelForSequenceClassification.from_pretrained("microsoft/deberta-v2-xlarge-mnli").cuda()

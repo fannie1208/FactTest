@@ -13,7 +13,7 @@ import numpy as np
 import math
 import os
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 
 torch.cuda.empty_cache()
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
@@ -126,8 +126,8 @@ if __name__ == "__main__":
     else:
         deberta_tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli")
         deberta_model = AutoModelForSequenceClassification.from_pretrained("microsoft/deberta-v2-xlarge-mnli",device_map=device)
-        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.bfloat16,device_map='auto',cache_dir=cache_dir)
+        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.bfloat16,device_map='auto')
 
         certainties = []
         with open(f"../training_data/WiCE_{model_name}_{args.dataset}.json",'r') as f:

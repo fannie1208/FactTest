@@ -14,7 +14,7 @@ import numpy as np
 import math
 import os
 
-cache_dir = '/work/vita/nie/cache/huggingface/hub'
+
 
 end_chars = ['.', '\n']
 device = 'cuda:0'
@@ -162,8 +162,8 @@ if __name__ == "__main__":
                     f.write(f"k:{k+1} threshold:{certainties[k]} alpha:{args.alpha} delta:{args.delta}\n")
                 break
     else:
-        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False,cache_dir=cache_dir)
-        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.float16,device_map=device,cache_dir=cache_dir)
+        tokenizer = AutoTokenizer.from_pretrained(args.model,use_fast=True,unk_token="<unk>",bos_token="<s>",eos_token="</s>",add_bos_token=False)
+        model = AutoModelForCausalLM.from_pretrained(args.model,torch_dtype=torch.float16,device_map=device)
 
         deberta_tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli")
         deberta_model = AutoModelForSequenceClassification.from_pretrained("microsoft/deberta-v2-xlarge-mnli",device_map=device)
