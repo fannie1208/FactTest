@@ -48,6 +48,7 @@
 ## 📰 News
 
 - **🎉 May 27, 2025**: Source code released!
+- **🎉 May 28, 2025**: Upload all four datasets!
 
 ---
 
@@ -59,10 +60,9 @@ This repository provides tools for testing factuality in Large Language Models w
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/FactTest.git
+git clone https://github.com/fannie1208/FactTest.git
 cd FactTest
 
-# Install dependencies (add your requirements.txt)
 pip install -r requirements.txt
 ```
 
