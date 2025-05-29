@@ -83,12 +83,29 @@ python collect_dataset.py --model openlm-research/open_llama_3b
 ```
 
 #### 🎚️ Calibration and Threshold Selection
+
+**For Vanilla Entropy Score Function:**
+
+Initial calibration run (computes and saves scores):
 ```bash
 python calculate_vanilla_threshold.py \
     --model openlm-research/open_llama_3b \
     --alpha 0.05 \
     --num_try 15
 ```
+
+**Reusing Saved Scores:**
+
+After the initial run, you can quickly calculate thresholds for different alpha values using the stored scores:
+```bash
+python calculate_vanilla_threshold.py \
+    --model openlm-research/open_llama_3b \
+    --alpha 0.1 \
+    --stored \
+    --num_try 15
+```
+
+The `--stored` flag allows you to experiment with different significance levels without re-running the expensive model evaluation.
 
 ### 📈 Step 2: Evaluation
 
